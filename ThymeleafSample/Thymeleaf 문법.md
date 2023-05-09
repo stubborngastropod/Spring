@@ -1,0 +1,208 @@
+### Thymeleaf 문법
+
+```java
+package com.example.demo.controller;
+
+import com.example.demo.entity.Member;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Controller
+public class ThymeleafController {
+    @GetMapping("show")
+    public String showView(Model model) {
+        Member member = new Member(1, "no.1");
+
+        Member member1 = new Member(10, "no.10");
+        Member member2 = new Member(20, "no.20");
+
+        List<String> directionList = new ArrayList<String>();
+        directionList.add("E");
+        directionList.add("W");
+        directionList.add("S");
+        directionList.add("N");
+
+        Map<String, Member> memberMap = new HashMap<>();
+        memberMap.put("TEN1", member1);
+        memberMap.put("TEN2", member2);
+
+        List<Member> memberList = new ArrayList<>();
+        memberList.add(member1);
+        memberList.add(member2);
+
+        model.addAttribute("name", "nono");
+        model.addAttribute("mb", member);
+        model.addAttribute("list", directionList);
+        model.addAttribute("map", memberMap);
+        model.addAttribute("members", memberList);
+
+        return "useThymeleaf";
+    }
+
+    @GetMapping("a")
+    public String showA() {
+        return "pageA";
+    }
+}
+
+```
+
+```html
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thymeleaf sample</title>
+</head>
+<body>
+  <h1 th:text="'hello world'">표시하는 부분</h1>
+  <h1>Hello [[${name}]]</h1>
+  <h1 th:text="'today\'s weather is ' + 'sunny'">표시하는 부분</h1>
+  <hr>
+  <h1 th:text="|hello Mr.${name}|">표시하는 부분</h1>
+  <div th:with="a=1,b=2">
+      <span th:text="|${a} + ${b} = ${a+b}|"></span>
+  </div>
+  <span th:text="1 > 10"></span>
+  <span th:text="1 < 10"></span>
+  <span th:text="1 == 10"></span>
+  <span th:text="1 != 10"></span>
+  <hr>
+  <p th:text="${name} == 'nono'? 'he is nono':'he is not nono'"></p>
+  <div th:if="${name} == 'nono'">
+      <p>He is nono</p>
+  </div>
+  <div th:unless="${name} == 'nunu'">
+      <p>He is not nunu</p>
+  </div>
+  <th:block th:if="${name} == 'nono'">
+      <p>He is nono</p>
+  </th:block>
+  <hr>
+  <div th:switch="${name}">
+      <p th:case="nono" th:text="|${name} good!|"></p>
+      <p th:case="nunu" th:text="|${name} good!|"></p>
+      <p th:case="nini" th:text="|${name} good!|"></p>
+      <p th:case="*">there's no nono</p>
+  </div>
+  .로 접근: <span th:text="${mb.id}">ID</span> - <span th:text="${mb.name}">이름</span><br>
+  []로 접근: <span th:text="${mb['id']}">ID</span> - <span th:text="${mb['name']}">이름</span><br>
+  <th:block th:object="${mb}">
+    .로 접근: <span th:text="*{id}">ID</span> - <span th:text="*{name}">이름</span><br>
+    []로 접근: <span th:text="*{['id']}">ID</span> - <span th:text="*{['name']}">이름</span><br>
+  </th:block>
+  <hr>
+  <span th:text="${list[0]}"></span>
+  <span th:text="${list[1]}"></span>
+  <span th:text="${list[2]}"></span>
+  <span th:text="${list[3]}"></span> <br>
+  .으로 접근: <span th:text="${map.TEN1.name}"></span> - <span th:text="${map.TEN2.name}"></span> <br>
+  []으로 접근: <span th:text="${map['TEN1']['name']}"></span> - <span th:text="${map['TEN2']['name']}"></span> <br>
+  <div th:each="member : ${members}">
+      <p>[[${member.id}]] : [[${member.name}]]</p>
+  </div>
+  <hr>
+  <div th:each="member, s: ${members}" th:object="${member}">
+      <p>
+          index -> [[${s.index}]], count -> [[${s.count}]],
+          size -> [[${s.size}]], current -> [[${s.current}]],
+          even -> [[${s.even}]], odd -> [[${s.odd}]],
+          first -> [[${s.first}]], last -> [[${s.last}]],
+          [[*{id}]] : [[*{name}]]
+      </p>
+  </div>
+  <div th:with="x=1000000, y=123456.789">
+      int: <span th:text="${#numbers.formatInteger(x, 3, 'COMMA')}"></span> <br>
+      float: <span th:text="${#numbers.formatDecimal(y, 3, 'COMMA', 2, 'POINT')}"></span>
+  </div>
+  <br>
+  <div th:with="today=${#dates.createNow()}">
+      yyyy/mm/dd: <span th:text="${#dates.format(today, 'yyyy/MM/dd')}"></span> <br>
+      yyyy년 mm월 dd일: <span th:text="${#dates.format(today, 'yyyy년 MM월 dd일')}"></span> <br>
+      year: <span th:text="${#dates.year(today)}"></span><br>
+      month: <span th:text="${#dates.month(today)}"></span><br>
+      day: <span th:text="${#dates.day(today)}"></span><br>
+      dayofweek: <span th:text="${#dates.dayOfWeek(today)}"></span><br>
+  </div>
+  <div th:with="str1='abcdef'">
+      upper: <span th:text="${#strings.toUpperCase(str1)}"></span><br>
+      empty: <span th:text="${#strings.isEmpty(str1)}"></span><br>
+      length: <span th:text="${#strings.length(str1)}"></span><br>
+  </div>
+  <h1>Fragment 삽입</h1>
+  <div id="one" th:insert='fragment :: one'></div>
+  <div id="three" th:replace='fragment :: three'></div>
+</body>
+</html>
+```
+
+```html
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>fragment</title>
+</head>
+<body>
+  <span th:fragment="one">하나</span>
+  <span th:fragment="two">둘</span>
+  <span th:fragment="three">셋</span>
+</body>
+</html>
+```
+
+### Layout
+
+공통 레이아웃인 데코레이터를 이용, fragment를 생성해서 사용 가능
+
+```html
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>base: layout</title>
+</head>
+<body>
+  <header>
+    <div align="center">
+      <h1>HEADER</h1>
+    </div>
+  </header>
+  <div layout:fragment="content" align="center">
+    여기를 대체
+  </div>
+  <footer>
+    <hr>
+    <div align="center">
+      <h1>FOOTER</h1>
+    </div>
+  </footer>
+</body>
+</html>
+```
+
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{commons/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>PAGE A</title>
+</head>
+<body>
+  <div layout:fragment="content">
+    <h1>PAGE A</h1>
+  </div>
+</body>
+</html>
+
+

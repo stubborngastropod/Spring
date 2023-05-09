@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>base: layout</title>
+</head>
+<body>
+  <header>
+    <div align="center">
+      <h1>HEADER</h1>
+    </div>
+  </header>
+  <div layout:fragment="content" align="center">
+    여기를 대체
+  </div>
+  <footer>
+    <hr>
+    <div align="center">
+      <h1>FOOTER</h1>
+    </div>
+  </footer>
+</body>
+</html>
