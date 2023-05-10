@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SHOW</title>
+</head>
+<body>
+<div>
+    <h3><a th:href="@{/function/1}">FUNCTION 1</a></h3>
+    <h3><a th:href="@{/function/2}">FUNCTION 2</a></h3>
+    <h3><a th:href="@{/function/3}">FUNCTION 3</a></h3>
+
+    <form th:action="@{/send}" method="post">
+        <input type="submit" value="BUTTON A" name="a">
+        <input type="submit" value="BUTTON B" name="b">
+        <input type="submit" value="BUTTON C" name="c">
+    </form>
+</div>
+</body>
+</html>

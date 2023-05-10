@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>INPUT</title>
+</head>
+<body>
+<form th:action="@{/confirm}" method="post">
+    <div>
+        <label for="name">NAME: </label>
+        <input type="text" name="name">
+    </div>
+    <div>
+        <label for="age">AGE: </label>
+        <input type="number" name="age" min="1" max="100">
+    </div>
+    <div>
+        <label for="birth">BIRTH: </label>
+        <input type="date" name="birth">
+    </div>
+    <input type="submit" value="SUBMIT">
+</form>
+</body>
+</html>
