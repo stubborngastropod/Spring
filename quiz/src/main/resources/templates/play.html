@@ -1,0 +1,24 @@
+<!--play.html-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>OX QUIZ PLAY</title>
+</head>
+<body>
+<h1>OX QUIZ APPLICATION:PLAY</h1>
+<h3>QUIZ</h3>
+<th:block th:if="${msg}">
+    <p th:text="${msg}" style="color:red"></p>
+    <a th:href="@{/quiz/}">BACK TO CRUD</a>
+</th:block>
+<th:block th:unless="${msg}">
+    <p th:text="${quizForm.question}">QUIZ</p>
+    <form th:action="@{/quiz/check}" th:object="${quizForm}" method="POST">
+        <input type="hidden" th:field="*{id}">
+        <button name="answer" value="true">O</button>
+        <button name="answer" value="false">X</button>
+    </form>
+</th:block>
+</body>
+</html>

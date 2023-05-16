@@ -1,0 +1,14 @@
+<!--answer.html-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>RESULT</title>
+</head>
+<body>
+<h1>RESULT</h1>
+<h2 th:text="${msg}" th:style="'color:' + (${msg} == 'CORRECT' ? 'green' : 'red')"></h2>
+<a th:href="@{/quiz/play}">REPLAY</a>
+<a th:href="@{/quiz}">BACK TO CRUD</a>
+</body>
+</html>
